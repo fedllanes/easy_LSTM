@@ -3,26 +3,29 @@ import pandas as pd
 
 
 class EasyLSTM:
-    def __init__(self, make_model, n_steps=20):
-        self.n_steps = n_steps
+    def __init__(self, make_model):
+        self.n_steps = None
         self.n_features = None
-        self.model = make_model(self.n_steps, self.n_features)
+        self.make_model = make_model
+        self.model = None
         self.X = None
         self.history = None
         self.columns = None
 
-    def fit(self, dataset, train_test_split=0, epochs=20, verbose=0, *args, **kwargs):
+    def fit(self, dataset, train_test_split=0, epochs=20, verbose=0, n_steps=20, *args, **kwargs):
         if not isinstance(dataset, pd.DataFrame):
             dataset = pd.DataFrame(dataset)
+        self.n_steps = n_steps
         self.columns = dataset.columns
         self.n_features = dataset.shape[1]
+        self.model = self.make_model(self.n_steps, self.n_features)
         validation_data = None
         if train_test_split > 0:
             df_test = dataset[-int(len(dataset) * train_test_split):]
             validation_data = self._treat_dataframe(df_test)
             dataset = dataset[:int(len(dataset) * train_test_split)]
         X, y = self._treat_dataframe(dataset)
-        self.X = X if train_test_split == 0 else validation_data[0]
+        self.X = self._format(validation_data[0], validation_data[1]) if train_test_split != 0 else self._format(X, y)
         self.history = self.model.fit(X, y, epochs=epochs, verbose=verbose, validation_data=validation_data, *args,
                                       **kwargs)
 
@@ -74,6 +77,11 @@ class EasyLSTM:
         for i in range(n_predictions + 1):
             x_input = X_new[-1].reshape((1, self.n_steps, self.n_features))
             yhat = self.model.predict(x_input, verbose=0)
-            new_element = np.concatenate([X_new[-1][1:, :].reshape(self.n_steps - 1, self.n_features), yhat])
+            new_element = np.concatenate([X_new[-1][1:, :], yhat])
             X_new = np.append(X_new, new_element.reshape(1, self.n_steps, self.n_features), axis=0)
         return X_new
+
+    def _format(self, X,y):
+        new_element = np.concatenate([X[-1][1:, :], y[-1].reshape(1, self.n_features)])
+        X = np.concatenate([X,new_element.reshape(1,X.shape[1],X.shape[2])])
+        return X
