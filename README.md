@@ -15,8 +15,8 @@ def make_model(n_steps, n_features):
     model.compile(optimizer='adam', loss='mse')
     return model
 ```
-Once the function is created, and we have our dataframe ready. The magic is ready to happen. Our function 
-needs to take the n_steps and n_features as input. They'll be automatically calculated.
+Once the function is created, and we have our dataframe ready. Our function takea n_steps and n_features as inputs. Later on, they'll be automatically calculated.
+Here's the magic part
 
 ```
 model = EasyLSTM(make_model)
@@ -28,3 +28,5 @@ Model history is saved in model.history
 Fit needs the parameters: dataset, epochs=20, n_steps=20
 Optionally it can take train_test_split=0, test_elements=0. train_test_split is the percentage of the dataset
 reserved for validation. test_element is the number of elements. If both are given, train_test_split is given priority.
+
+If we want to try several models, we just change the make_model function. If we want to try different hyperparameters, it'll be enough with fitting the same class as many times as neccesary. 
