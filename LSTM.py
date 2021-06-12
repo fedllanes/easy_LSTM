@@ -4,6 +4,9 @@ import pandas as pd
 
 class EasyLSTM:
     def __init__(self, make_model):
+        """"
+        :param make_model: The function that returns the model
+        """
         self.n_steps = None
         self.n_features = None
         self.make_model = make_model
@@ -12,7 +15,16 @@ class EasyLSTM:
         self.history = None
         self.columns = None
 
-    def fit(self, dataset, train_test_split=0, test_elements=0, epochs=20, verbose=0, n_steps=20, *args, **kwargs):
+    def fit(self, dataset, train_test_split=0, test_elements=0, epochs=20, n_steps=20, *args, **kwargs):
+        """
+        :param dataset: Our input dataframe
+        :param train_test_split: The percentage we want to reserve for testing
+        :param test_elements: The number of elements we want to reserve for testing (train_test_split overrides it)
+        :param epochs: The number of epochs
+        :param n_steps: How far into the past we should look
+        :param args: Extra arguments
+        :param kwargs: Extra arguments for the fitting function, such as callbacks or verbose.
+        """
         if not isinstance(dataset, pd.DataFrame):
             dataset = pd.DataFrame(dataset)
         self.n_steps = n_steps
@@ -28,7 +40,7 @@ class EasyLSTM:
             dataset = dataset[:-test_elements]
         X, y = self._treat_dataframe(dataset)
         self.X = self._format(X, y)
-        self.history = self.model.fit(X, y, epochs=epochs, verbose=verbose, validation_data=validation_data, *args,
+        self.history = self.model.fit(X, y, epochs=epochs, validation_data=validation_data, *args,
                                       **kwargs)
 
     def predict(self, n_predictions):
