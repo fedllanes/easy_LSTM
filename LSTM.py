@@ -12,7 +12,7 @@ class EasyLSTM:
         self.history = None
         self.columns = None
 
-    def fit(self, dataset, train_test_split=0, epochs=20, verbose=0, n_steps=20, *args, **kwargs):
+    def fit(self, dataset, train_test_split=0, test_elements=0, epochs=20, verbose=0, n_steps=20, *args, **kwargs):
         if not isinstance(dataset, pd.DataFrame):
             dataset = pd.DataFrame(dataset)
         self.n_steps = n_steps
@@ -21,9 +21,11 @@ class EasyLSTM:
         self.model = self.make_model(self.n_steps, self.n_features)
         validation_data = None
         if train_test_split > 0:
-            df_test = dataset[-int(len(dataset) * train_test_split):]
+            test_elements = int(len(dataset) * train_test_split)
+        if train_test_split or test_elements:
+            df_test = dataset[-test_elements:]
             validation_data = self._treat_dataframe(df_test)
-            dataset = dataset[:-int(len(dataset) * train_test_split)]
+            dataset = dataset[:-test_elements]
         X, y = self._treat_dataframe(dataset)
         self.X = self._format(X, y)
         self.history = self.model.fit(X, y, epochs=epochs, verbose=verbose, validation_data=validation_data, *args,
