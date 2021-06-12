@@ -1,8 +1,9 @@
 # EASY LSTM
 
 Dealing with simple LSTM models can be a real pain, due to the excessive ammount of preprocessing required.
-This model takes very few inputs, among them, a function that returns model during the initialization, the hyperparameters to fit the model, and it'll return the output as a DataFrame.
-This class only works as single-input to single-output and multiple-output to multiple-out. To work with multiple-input to single-output it should be tweaked.
+This model takes very few inputs, among them, a function that returns model during the initialization, the hyperparameters to fit the model. It returns the output as a pandas DataFrame.
+
+PD: This class only works as single-input to single-output and multiple-output to multiple-out. To work with multiple-input to single-output it should be tweaked.
 
 # Example
 
@@ -20,7 +21,7 @@ Here's the magic part
 
 ```
 model = EasyLSTM(make_model)
-model.fit(dataset=final, n_steps=5, epochs=100, test_elements=20)
+model.fit(dataset=df, n_steps=5, epochs=100, test_elements=20)
 predictions = model.predict(n_predictions=20)
 ```
 
