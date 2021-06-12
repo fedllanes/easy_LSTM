@@ -23,9 +23,9 @@ class EasyLSTM:
         if train_test_split > 0:
             df_test = dataset[-int(len(dataset) * train_test_split):]
             validation_data = self._treat_dataframe(df_test)
-            dataset = dataset[:int(len(dataset) * train_test_split)]
+            dataset = dataset[:-int(len(dataset) * train_test_split)]
         X, y = self._treat_dataframe(dataset)
-        self.X = self._format(validation_data[0], validation_data[1]) if train_test_split != 0 else self._format(X, y)
+        self.X = self._format(X, y)
         self.history = self.model.fit(X, y, epochs=epochs, verbose=verbose, validation_data=validation_data, *args,
                                       **kwargs)
 
