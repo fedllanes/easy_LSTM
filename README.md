@@ -27,6 +27,7 @@ predictions = model.predict(n_predictions=20)
 
 Model history is saved in model.history
 Fit needs the parameters: dataset, epochs=20, n_steps=20
+Predictions only needs the number of predictions and it'll start predicting from the last point of the training dataset. You can also pass the argument df, and it'll predict for whatever df you want it to.
 Optionally it can take train_test_split=0, test_elements=0. train_test_split is the percentage of the dataset
 reserved for validation. test_element is the number of elements. If both are given, train_test_split is given priority.
 
