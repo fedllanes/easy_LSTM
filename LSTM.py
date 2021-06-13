@@ -43,9 +43,14 @@ class EasyLSTM:
         self.history = self.model.fit(X, y, epochs=epochs, validation_data=validation_data, *args,
                                       **kwargs)
 
-    def predict(self, n_predictions):
-        X_entended = self._make_prediction(n_predictions)
-        predictions = self._inverse_logic(X_entended)[-n_predictions:]
+    def predict(self, n_predictions, df=None):
+        if df is None:
+            X = self.X
+        else:
+            X, y = self._treat_dataframe(df)
+            X = self._format(X, y)
+        X_extended = self._make_prediction(n_predictions, X)
+        predictions = self._inverse_logic(X_extended)[-n_predictions:]
         predictions = pd.DataFrame(np.array(predictions), columns=self.columns)
         return predictions
 
@@ -86,8 +91,7 @@ class EasyLSTM:
             new.append(X[i][j])
         return new
 
-    def _make_prediction(self, n_predictions):
-        X_new = self.X.copy()
+    def _make_prediction(self, n_predictions, X_new):
         for i in range(n_predictions + 1):
             x_input = X_new[-1].reshape((1, self.n_steps, self.n_features))
             yhat = self.model.predict(x_input, verbose=0)
@@ -95,7 +99,7 @@ class EasyLSTM:
             X_new = np.append(X_new, new_element.reshape(1, self.n_steps, self.n_features), axis=0)
         return X_new
 
-    def _format(self, X,y):
+    def _format(self, X, y):
         new_element = np.concatenate([X[-1][1:, :], y[-1].reshape(1, self.n_features)])
-        X = np.concatenate([X,new_element.reshape(1,X.shape[1],X.shape[2])])
+        X = np.concatenate([X, new_element.reshape(1, X.shape[1], X.shape[2])])
         return X
