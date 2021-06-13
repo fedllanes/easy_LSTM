@@ -1,4 +1,4 @@
-# EASY LSTM
+# easyLSTM
 
 Dealing with simple LSTM models can be a real pain, due to the excessive ammount of preprocessing required.
 This model takes very few inputs, among them, a function that returns model during the initialization, the hyperparameters to fit the model. It returns the output as a pandas DataFrame.
