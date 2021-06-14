@@ -1,9 +1,10 @@
 # easyLSTM
 
-Dealing with simple LSTM models can be a real pain, due to the excessive ammount of preprocessing required.
-This model takes very few inputs, among them, a function that returns model during the initialization, the hyperparameters to fit the model. It returns the output as a pandas DataFrame.
-
-PD: This class only works as single-input to single-output and multiple-output to multiple-out. To work with multiple-input to single-output it should be tweaked.
+Dealing with simple LSTM models can be a real pain, specially due to the excessive ammount of preprocessing required.
+However, easyLSTM takes very few inputs, amongst them, a function that returns model during the initialization and the hyperparameters to fit the model.
+Both inputs and outputs are a pandas DataFrame
+PD: This class only works as single-input to single-output and multiple-output to multiple-output.
+To work with multiple-input to single-output it should be tweaked.
 
 # Example
 
